@@ -1,7 +1,6 @@
 import { ALL_FORMATS, Input, UrlSource } from "mediabunny";
 import { Composition, staticFile } from "remotion";
-import { Visualizer } from "./Visualizer/Main";
-import { visualizerCompositionSchema } from "./helpers/schema";
+import { MusicVideoComp } from "./MusicVideo";
 
 const FPS = 30;
 
@@ -9,46 +8,25 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition
-        id="Visualizer"
-        component={Visualizer}
-        width={1080}
+        id="MusicVideo"
+        component={MusicVideoComp}
+        width={1920}
         height={1080}
-        schema={visualizerCompositionSchema}
-        defaultProps={{
-          // audio settings
-          audioOffsetInSeconds: 0,
-          audioFileUrl: staticFile("demo-track.mp3"),
-          // song data
-          coverImageUrl: staticFile("demo-song-cover.jpeg"),
-          songName: "No Days Off",
-          artistName: "",
-          textColor: "white",
-          // visualizer settings
-          visualizer: {
-            type: "spectrum" as const,
-            bassOverlay: true,
-            color: "#0b84f3",
-            linesToDisplay: 65,
-            mirrorWave: false,
-            numberOfSamples: "512" as const,
-          },
-        }}
-        // Determine the length of the video based on the duration of the audio file
-        calculateMetadata={async ({ props }) => {
+        fps={FPS}
+        defaultProps={{ totalFrames: 8640 }}
+        calculateMetadata={async () => {
           const input = new Input({
-            source: new UrlSource(props.audioFileUrl, {
+            source: new UrlSource(staticFile("demo-track.mp3"), {
               getRetryDelay: () => null,
             }),
             formats: ALL_FORMATS,
           });
-
           const durationInSeconds = await input.computeDuration();
-
+          const totalFrames = Math.floor(durationInSeconds * FPS);
           return {
-            durationInFrames: Math.floor(
-              (durationInSeconds - props.audioOffsetInSeconds) * FPS,
-            ),
+            durationInFrames: totalFrames,
             fps: FPS,
+            props: { totalFrames },
           };
         }}
       />
