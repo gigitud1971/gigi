@@ -1,9 +1,9 @@
 import {
   AbsoluteFill,
   Audio,
+  OffthreadVideo,
   interpolate,
   Sequence,
-  Video,
   staticFile,
   useCurrentFrame,
 } from "remotion";
@@ -26,15 +26,9 @@ const SceneClip: React.FC<{ src: string; durationInFrames: number }> = ({
 
   return (
     <AbsoluteFill style={{ opacity, overflow: "hidden" }}>
-      <Video
+      <OffthreadVideo
         src={src}
-        style={{
-          width: "100%",
-          height: "100%",
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          objectFit: "cover" as any,
-        }}
-        loop
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
     </AbsoluteFill>
   );
