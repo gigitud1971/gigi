@@ -20,8 +20,8 @@ export const RemotionRoot: React.FC = () => {
           audioFileUrl: staticFile("demo-track.mp3"),
           // song data
           coverImageUrl: staticFile("demo-song-cover.jpeg"),
-          songName: "Sunset Render Deja Vu",
-          artistName: "Remotion",
+          songName: "No Days Off",
+          artistName: "",
           textColor: "white",
           // visualizer settings
           visualizer: {
